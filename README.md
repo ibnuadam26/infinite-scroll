@@ -68,3 +68,32 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+# infinite-scroll
+Infinite scroll in react js
+
+Alur kerja dari kode tersebut adalah sebagai berikut:
+
+1. Pada awalnya, komponen App akan merender beberapa `item` dengan menggunakan state `items` yang diinisialisasi dengan 20 item pada baris ke-6.
+2. Komponen App akan merender komponen InfiniteScroll yang memiliki properti `dataLength`, `next`, `hasMore`, dan `loader`.
+3. InfiniteScroll akan merender item-item yang ada pada `items` dengan menggunakan `.map()` pada baris ke-33. Pada awalnya, item yang dirender adalah 20 item yang sudah diinisialisasi pada langkah 1.
+4. InfiniteScroll mengecek apakah properti `hasMore` bernilai `true`. Jika iya, maka InfiniteScroll akan menjalankan fungsi `next` pada saat scroll mencapai bawah. Fungsi next akan menambahkan 20 item baru pada `items` dan merender ulang komponen App dengan menggunakan `setItems()`.
+5. Jika `items.length` sudah mencapai 100, maka nilai `hasMore` akan diset menjadi `false`. Saat InfiniteScroll mencapai data terakhir dan `hasMore` bernilai `false`, loader tidak akan ditampilkan.
+
+Maka dari itu, ketika InfiniteScroll mencapai data terakhir dan `hasMore` bernilai `false`, loader tidak akan ditampilkan. Hal ini disebabkan karena pada kode yang diberikan, nilai `hasMore` digunakan untuk menentukan apakah InfiniteScroll harus terus memuat data atau tidak. Oleh karena itu, ketika nilai `hasMore` adalah `false`, InfiniteScroll tidak lagi memuat data dan loader tidak ditampilkan
+
+More ditails: 
+1. Pertama-tama, diinisialisasi state `items` dan ```hasMore``` menggunakan ```useState```. ```items``` digunakan untuk menyimpan daftar item yang akan ditampilkan di dalam `InfiniteScroll`, sedangkan `hasMore` digunakan untuk menentukan apakah masih ada item yang harus diambil atau tidak.
+
+2. Selanjutnya, ```useEffect``` digunakan untuk memperbarui state `hasMore` ketika `items` berubah. Jika jumlah item dalam `items` sudah mencapai 100, `hasMore` di-set menjadi `false` agar `InfiniteScroll` tidak lagi mencoba untuk memuat lebih banyak item.
+
+3. Fungsi ```fetchMoreData``` dipanggil ketika ```InfiniteScroll``` mencapai akhir halaman. Fungsi ini menggunakan `setTimeout` untuk menunda penambahan item baru selama 1,5 detik. Kemudian, `newItems` diisi dengan array baru yang berisi 20 item baru. Setiap item baru memiliki properti `id` dan `content`, yang digunakan untuk menampilkan konten di dalam `div` di dalam `InfiniteScroll`.
+
+4. Setelah array ```newItems``` diisi dengan item baru, ```setItems``` digunakan untuk menambahkan item baru ke dalam `items`.
+
+5. Dalam ```return```, ```InfiniteScroll``` digunakan untuk menampilkan daftar item. Properti `dataLength` di-set ke panjang `items` agar `InfiniteScroll` tahu berapa banyak item yang sudah ditampilkan. Properti `next` di-set ke `fetchMoreData` agar `InfiniteScroll` tahu apa yang harus dilakukan ketika mencapai akhir halaman. Properti `hasMore` di-set ke `hasMore` agar `InfiniteScroll` tahu apakah masih ada item yang harus diambil atau tidak. Properti `loader` di-set ke komponen `<h4>Loading...</h4>` agar tampil ketika sedang memuat item baru.
+
+6. Di dalam ```InfiniteScroll```, `items` di-mapping ke dalam `div` menggunakan fungsi `.map()`. Setiap `div` memiliki style yang diatur dengan `style`, dan memiliki properti `key` yang di-set ke `i.id`. Konten `div` diisi dengan `i.content`.
+
+7. Setelah proses di atas selesai, tampilan aplikasi akan menampilkan daftar item yang terus bertambah ketika halaman di-scroll hingga mencapai batas maksimum 100 item
